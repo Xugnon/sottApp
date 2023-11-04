@@ -13,7 +13,7 @@ export async function createProduct(req: Request, res: Response) {
       imagePath,
       price: Number(price),
       category,
-      ingredients: ingredients ? JSON.parse(ingredients) : [],
+      ingredients: ingredients ? JSON.parse(ingredients) : [], //If it has a ingredient, parse it, if not, return an empty array
     });
 
     res.status(201).json(product);

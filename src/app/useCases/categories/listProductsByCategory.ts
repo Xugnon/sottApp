@@ -6,6 +6,7 @@ export async function listProductsByCategory(req: Request, res: Response) {
   try {
     const { categoryId } = req.params;
 
+    //Find where category is equal to categoryId
     const products = await Product.find().where('category').equals(categoryId);
 
     res.status(200).json(products);
