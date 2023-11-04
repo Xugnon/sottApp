@@ -1,9 +1,28 @@
 import { Router } from 'express';
+import multer from 'multer';
+import path from 'node:path';
 
 import { listCategories } from './app/useCases/categories/listCategories';
 import { createCategory } from './app/useCases/categories/createCategory';
+import { listProducts } from './app/useCases/products/listProducts';
+import { createProduct } from './app/useCases/products/createProduct';
 
 export const router = Router();
+
+//Multer for image upload
+const upload = multer({
+  storage: multer.diskStorage({
+    //Save on 'uploads' folder
+    destination(req, file, callback) {
+      //__dirname is the full path to the file, so go back to a folder ('..') and save it in 'uploads'
+      callback(null, path.resolve(__dirname, '..', 'uploads'));
+    },
+    //Change the name of the image to the current date next to the original name
+    filename(req, file, callback) {
+      callback(null, `${Date.now()}-${file.originalname}`);
+    },
+  }),
+});
 
 //List categories
 router.get('/categories', listCategories);
@@ -12,14 +31,10 @@ router.get('/categories', listCategories);
 router.post('/categories', createCategory);
 
 //List products
-router.get('/products', (req, res) => {
-  res.send('ok');
-});
+router.get('/products', listProducts);
 
 //Create product
-router.post('/products', (req, res) => {
-  res.send('ok');
-});
+router.post('/products', upload.single('image'), createProduct);
 
 //Get products by category
 router.get('/categories/:categoryId/products', (req, res) => {
