@@ -10,6 +10,7 @@ mongoose
     //On successful database connection, run the API
     const app = express();
 
+    app.use(express.json());
     app.use(router);
 
     app.listen(3001, () => {
